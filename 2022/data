@@ -1,0 +1,17 @@
+#!/usr/bin/env zx
+
+const [day, type] = process.argv.splice(3);
+
+if (
+  !/\d+/.test(day) ||
+  Number(day) < 1 ||
+  Number(day) > 25 ||
+  !["sample", "final"].includes(type)
+) {
+  console.log("Usage: ./data <day> <sample/final>");
+  process.exit(1);
+}
+
+await $`pbpaste > in/${day}.${type}.txt`
+
+console.log(`Written to in/${day}.${type}.txt`)
