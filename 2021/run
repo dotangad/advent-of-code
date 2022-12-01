@@ -12,4 +12,4 @@ if (
   process.exit(1);
 }
 
-await $`node ${day}.js in/${day}.${type}.txt`
+await $`ts-node ${day}.ts in/${day}.${type}.txt`
