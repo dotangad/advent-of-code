@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { sum } = require("./utils");
 const input = fs
   .readFileSync(__dirname + "/" + process.argv[2])
   .toString()
