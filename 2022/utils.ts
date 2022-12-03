@@ -18,3 +18,21 @@ export function readInput(fileName: string) {
 
   return input;
 }
+
+export function mapLog(inp: any): any {
+  console.log(inp);
+  return inp;
+}
+
+export function mapLogOnce(...args: any[]) {
+  let printed = false;
+
+  return (inp: any): any => {
+    if(!printed) {
+      console.log(...args);
+      printed = true;
+    }
+
+    return inp;
+  }
+}
