@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { chain as ch } from "lodash";
 import { readInput, between } from "./utils";
 
-type Section = number[];
+type Section = [number, number];
 type InputType = Section[][];
 const input: InputType =
   ch(readInput(process.argv[2]))
@@ -10,10 +10,11 @@ const input: InputType =
     .filter(x => !!x)
     .map(x =>
       x.split(',')
-        .map(y =>
-          y.split('-')
-            .map(z => parseInt(z.trim()))
-        ))
+        .map(y => {
+          const [b, e] = y.split('-').map(z => parseInt(z.trim()))
+          return [b, e] as Section;
+        })
+    )
     .value();
 
 function one(input: InputType) {
@@ -38,8 +39,10 @@ function two(input: InputType) {
     const [s1b, s1e] = s1;
     const [s2b, s2e] = s2;
 
-    if(between(s1b, s1e, s2b) || between(s1b, s1e, s2e)) return true;
-    if(between(s2b, s2e, s1b) || between(s2b, s2e, s1e)) return true;
+    // An overlap happens when a section either begins or ends inside another section
+    // i.e. the beginning or end is within the bounds of the other section
+    if (between(s1b, s1e, s2b) || between(s1b, s1e, s2e)) return true;
+    if (between(s2b, s2e, s1b) || between(s2b, s2e, s1e)) return true;
 
     return false;
   }
