@@ -1,5 +1,8 @@
 import { readFileSync } from "fs";
 
+/**
+  * Read input from a file and return as a string, with some nice error handling
+  */
 export function readInput(fileName: string) {
   let input: string;
 
@@ -19,20 +22,37 @@ export function readInput(fileName: string) {
   return input;
 }
 
+/**
+  * Log all elements inside an array, to be used as input to a `map` function
+  */
 export function mapLog(inp: any): any {
   console.log(inp);
   return inp;
 }
 
+/**
+  * Log to console, to be used as input to a `map` function
+  */
 export function mapLogOnce(...args: any[]) {
   let printed = false;
 
   return (inp: any): any => {
-    if(!printed) {
+    if (!printed) {
       console.log(...args);
       printed = true;
     }
 
     return inp;
   }
+}
+
+/**
+  * Check if `a` is between `x` and `y`
+  */
+export function between(x: number, y: number, a: number) {
+  const low = Math.min(x, y), high = Math.max(x, y);
+
+  if (a >= low && a <= high) return true;
+
+  return false;
 }

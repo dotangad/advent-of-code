@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { chain as ch } from "lodash";
-import { readInput } from "./utils";
+import { readInput, between } from "./utils";
 
 type Section = number[];
 type InputType = Section[][];
@@ -34,14 +34,6 @@ function one(input: InputType) {
 }
 
 function two(input: InputType) {
-  const between = (x: number, y: number, a: number) => {
-    const low = Math.min(x, y), high = Math.max(x, y);
-
-    if(a >= low && a <= high) return true;
-
-    return false;
-  }
-
   const sectionOverlap = (s1: Section, s2: Section) => {
     const [s1b, s1e] = s1;
     const [s2b, s2e] = s2;
@@ -51,7 +43,6 @@ function two(input: InputType) {
 
     return false;
   }
-
 
   return ch(input)
     .map(([s1, s2]) => sectionOverlap(s1, s2))
