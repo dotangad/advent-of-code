@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { chain as ch } from "lodash";
 import { readInput, between } from "./utils";
 
-type Section = [number, number];
+type Section = { start: number; end: number; };
 type InputType = Section[][];
 const input: InputType =
   ch(readInput(process.argv[2]))
@@ -11,19 +11,19 @@ const input: InputType =
     .map(x =>
       x.split(',')
         .map(y => {
-          const [b, e] = y.split('-').map(z => parseInt(z.trim()))
-          return [b, e] as Section;
+          const [b, e] = y.split('-')
+            .map(z => parseInt(z.trim()))
+          return { start: b, end: e };
         })
     )
     .value();
 
 function one(input: InputType) {
   const sectionContained = (s1: Section, s2: Section) => {
-    const [s1b, s1e] = s1;
-    const [s2b, s2e] = s2;
-
-    if (s2b >= s1b && s2e <= s1e) return true
-    if (s1b >= s2b && s1e <= s2e) return true
+    // S1 contains S2 if S2 starts after S1 and ends before
+    if (s2.start >= s1.start && s2.end <= s1.end) return true
+    // S2 contains S1 if S1 starts after S2 and ends before
+    if (s1.start >= s2.start && s1.end <= s2.end) return true
 
     return false;
   }
@@ -36,13 +36,16 @@ function one(input: InputType) {
 
 function two(input: InputType) {
   const sectionOverlap = (s1: Section, s2: Section) => {
-    const [s1b, s1e] = s1;
-    const [s2b, s2e] = s2;
-
     // An overlap happens when a section either begins or ends inside another section
     // i.e. the beginning or end is within the bounds of the other section
-    if (between(s1b, s1e, s2b) || between(s1b, s1e, s2e)) return true;
-    if (between(s2b, s2e, s1b) || between(s2b, s2e, s1e)) return true;
+    if (
+      between(s1.start, s1.end, s2.start) ||
+      between(s1.start, s1.end, s2.end)
+    ) return true;
+    if (
+      between(s2.start, s2.end, s1.start) ||
+      between(s2.start, s2.end, s1.end)
+    ) return true;
 
     return false;
   }
