@@ -1,37 +1,29 @@
 import * as _ from "lodash";
-import { chain as ch } from "lodash";
 import { readInput } from "./utils";
 
-type InputType = string[];
-const input: InputType =
-  ch(readInput(process.argv[2]))
-    .split("")
-    .value();
+type InputType = string;
+const input: InputType = readInput(process.argv[2]);
 
-function one(input: InputType) {
-  let sopMarker = -1;
-  for(let i = 4; i < input.length; i++) {
-    const last4 = input.slice(i - 4, i);
-    if (_.uniq(last4).length === 4) {
-      sopMarker = i;
+function firstUniqueSequence(input: string, length: number) {
+  let found = -1;
+  for (let i = length; i < input.length; i++) {
+    const last4 = input.slice(i - length, i);
+
+    if (_.uniq(last4).length === length) {
+      found = i;
       break;
     }
   }
 
-  return sopMarker;
+  return found;
+}
+
+function one(input: InputType) {
+  return firstUniqueSequence(input, 4);
 }
 
 function two(input: InputType) {
-  let somMarker = -1;
-  for(let i = 14; i < input.length; i++) {
-    const last14 = input.slice(i - 14, i);
-    if (_.uniq(last14).length === 14) {
-      somMarker = i;
-      break;
-    }
-  }
-
-  return somMarker;
+  return firstUniqueSequence(input, 14);
 }
 
 console.log(`Part 1: ${one(input)}`);
