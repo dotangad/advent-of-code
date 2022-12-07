@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import path from "path";
 
 /**
   * Read input from a file and return as a string, with some nice error handling
@@ -7,7 +8,7 @@ export function readInput(fileName: string) {
   let input: string;
 
   try {
-    input = readFileSync(String(fileName)).toString();
+    input = readFileSync(path.resolve(fileName)).toString();
   } catch (e: any) {
     if (e.code === 'ENOENT') {
       console.log("No input file found, please run the following command after copying input - ");

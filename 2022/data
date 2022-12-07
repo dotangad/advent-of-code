@@ -12,6 +12,5 @@ if (
   process.exit(1);
 }
 
-await $`pbpaste > in/${day}.${type}.txt`
-
-console.log(`Written to in/${day}.${type}.txt`)
+const dayClean = day.padStart(2, "0");
+await $`pbpaste > ../in/2022/${dayClean}.${type}.txt`;

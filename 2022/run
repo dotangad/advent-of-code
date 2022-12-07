@@ -12,4 +12,6 @@ if (
   process.exit(1);
 }
 
-await $`ts-node ${day}.ts in/${day}.${type}.txt`
+const dayClean = day.padStart(2, "0");
+
+await $`ts-node ${dayClean}.ts ../in/2022/${dayClean}.${type}.txt`;
