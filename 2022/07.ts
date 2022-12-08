@@ -9,6 +9,50 @@ const input: InputType =
     .filter(x => !!x)
     .value();
 
+/*
+// Adi's solution - https://github.com/IDoEverything/adventofcode22/blob/main/src/main.rs#L17
+function dirSizes(input: InputType): number[] {
+  let current: number[] = [];
+  let done: number[] = [];
+
+  for (let line of input) {
+    if (line.startsWith("$ cd ")) {
+      const [_$, _cmd, dir] = line.split(" ");
+      if (dir === "..") {
+        done.push(current.pop() ?? 0);
+      } else {
+        current.push(0);
+      }
+    } else if (!line.startsWith("$") && !line.startsWith("dir")) {
+      const [fsize, _fn] = line.split(" ");
+      current = current.map(x => x + parseInt(fsize));
+    }
+  }
+
+  return [...done, ...current];
+}
+
+function one(input: InputType) {
+  return ch(dirSizes(input))
+    .filter(x => x < 100000)
+    .sum()
+    .value();
+}
+
+function two(input: InputType) {
+  const DISK_SPACE = 70000000;
+  const REQUIRED_SPACE = 30000000;
+
+  const sizes = dirSizes(input);
+  const toFree = REQUIRED_SPACE - (DISK_SPACE - Math.max(...sizes));
+
+  return ch(sizes)
+    .filter(x => x > toFree)
+    .min()
+    .value();
+}
+*/
+
 type File = {
   name: string;
   isDirectory: boolean;
