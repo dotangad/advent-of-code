@@ -21,26 +21,10 @@ function touching(head: Position, tail: Position) {
     Math.abs(head.y - tail.y) <= 1;
 }
 
-function updateTailPos(ins: Instruction, head: Position, tail: Position) {
+function moveTail(head: Position, tail: Position) {
   if (!touching(head, tail)) {
-    switch (ins.direction) {
-      case 'R':
-        tail.x = head.x - 1;
-        tail.y = head.y;
-        break;
-      case 'L':
-        tail.x = head.x + 1;
-        tail.y = head.y;
-        break;
-      case 'U':
-        tail.x = head.x;
-        tail.y = head.y + 1;
-        break;
-      case 'D':
-        tail.x = head.x;
-        tail.y = head.y - 1;
-        break;
-    }
+    tail.x += _.clamp(head.x - tail.x, -1, 1);
+    tail.y += _.clamp(head.y - tail.y, -1, 1);
   }
 }
 
@@ -58,7 +42,7 @@ function one(input: InputType) {
   for (let instruction of input) {
     for (let i = 0; i < instruction.steps; i++) {
       op[instruction.direction](head);
-      updateTailPos(instruction, head, tail);
+      moveTail(head, tail);
       tailHist.push(_.clone(tail));
     }
   }
@@ -71,9 +55,8 @@ function one(input: InputType) {
 }
 
 function two(input: InputType) {
-  const KNOTS = 9;
-  const head: Position = { x: 0, y: 0 };
-  const knots: Position[] = Array(KNOTS).fill('-').map(() => _.clone(head));
+  const KNOTS = 10;
+  const knots: Position[] = Array(KNOTS).fill('-').map(() => ({ x: 0, y: 0 }));
   const tailHist: Position[] = [_.clone(knots[KNOTS - 1])];
   const op = {
     'R': (head: Position) => { head.x++ },
@@ -82,14 +65,16 @@ function two(input: InputType) {
     'D': (head: Position) => { head.y++ }
   };
 
-  for (let instruction of input) {
-    for(let i = 0; i < instruction.steps; i++) {
-      op[instruction.direction](head);
-      updateTailPos(instruction, head, knots[0]);
-      for(let j = 1; j < knots.length ;j++) {
-        updateTailPos(instruction, knots[j - 1], knots[j]);
+  for (let { direction, steps } of input) {
+    for (let i = 0; i < steps; i++) {
+      op[direction](knots[0]);
+      for (let j = 1; j < knots.length; j++) {
+        moveTail(knots[j - 1], knots[j]);
+        // if (!touching(knots[j - 1], knots[j])) {
+        //   knots[j].x += _.clamp(knots[j - 1].x - knots[j].x, -1, 1);
+        //   knots[j].y += _.clamp(knots[j - 1].y - knots[j].y, -1, 1);
+        // }
       }
-
       tailHist.push(_.clone(knots[KNOTS - 1]));
     }
   }
